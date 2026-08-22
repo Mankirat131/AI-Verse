@@ -1,0 +1,191 @@
+/*
+  Trending tools section styling.
+  Cards are quiet by default and lift gently on hover,
+  with a thin wine line appearing along the top edge.
+*/
+
+.trending-section {
+  padding: 40px 24px 130px;
+}
+
+/* Header row: text on the left, "view all" link on the right */
+.trending-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.trending-header .section-header {
+  margin-bottom: 0;
+}
+
+.trending-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+
+  padding-bottom: 6px;
+
+  color: var(--color-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.trending-view-all:hover {
+  color: var(--color-accent-text);
+  gap: 11px;
+}
+
+/* ---------- Grid ---------- */
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+
+/* ---------- Card ---------- */
+
+.tool-card {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 26px 24px 22px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  text-decoration: none;
+
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  background: var(--color-surface-raised);
+  border-color: rgba(138, 70, 82, 0.4);
+  box-shadow: 0 20px 44px -28px rgba(107, 48, 59, 0.55);
+}
+
+/* ---------- Monogram placeholder icon ---------- */
+
+.tool-monogram {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, rgba(107, 48, 59, 0.55), rgba(107, 48, 59, 0.2));
+  border-radius: 11px;
+
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  transition: transform 0.25s ease;
+}
+
+.tool-card:hover .tool-monogram {
+  transform: scale(1.07);
+}
+
+/* Alternate cards use the muted violet from the atmosphere palette,
+   so the row doesn't look like one repeated block */
+.tool-monogram--violet {
+  background: linear-gradient(135deg, rgba(84, 70, 107, 0.55), rgba(84, 70, 107, 0.2));
+}
+
+/* ---------- Text content ---------- */
+
+.tool-name {
+  display: block;
+
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  font-weight: 600;
+}
+
+.tool-description {
+  margin: 8px 0 0;
+
+  color: var(--color-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.tool-info {
+  flex: 1; /* pushes the meta row to the bottom of the card */
+}
+
+/* ---------- Bottom meta row ---------- */
+
+.tool-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.tool-tag {
+  padding: 4px 12px;
+
+  color: var(--color-accent-text);
+  border: 1px solid rgba(138, 70, 82, 0.35);
+  border-radius: 999px;
+
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tool-rating {
+  color: rgba(166, 156, 152, 0.75);
+  font-size: 12.5px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .trending-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trending-header .section-header {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .trending-section {
+    padding: 20px 20px 90px;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+}

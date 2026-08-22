@@ -1,0 +1,236 @@
+/*
+  Category section styling.
+
+  The grid uses fixed columns on desktop (so the featured block can
+  span two of them) and collapses gracefully on smaller screens.
+*/
+
+.categories-section {
+  padding: 110px 24px 90px;
+}
+
+/* ---------- Shared section header styles ---------- */
+/* These classes are reused by TrendingTools too. */
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  max-width: 560px;
+  margin-bottom: 56px;
+}
+
+.section-eyebrow {
+  display: block;
+  margin-bottom: 14px;
+
+  color: var(--color-accent-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin: 0;
+
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.section-subtitle {
+  margin: 16px 0 0;
+
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+/* ---------- Grid ---------- */
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* ---------- Category block ---------- */
+
+.category-card {
+  position: relative;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 26px 24px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  text-decoration: none;
+  overflow: hidden; /* keeps the hover glow clipped to the rounded corners */
+
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* A faint wine light that fades in from the top corner on hover */
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 48, 59, 0.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(138, 70, 82, 0.45);
+  background: var(--color-surface-raised);
+}
+
+.category-card:hover::before {
+  opacity: 1;
+}
+
+/* ---------- Icon chip ---------- */
+
+.category-icon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-accent-text);
+  border: 1px solid rgba(138, 70, 82, 0.4);
+  border-radius: 12px;
+
+  transition: background-color 0.25s ease, color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.category-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Alternate blocks get a filled icon chip instead of an outline —
+   small variation that breaks up the "wall of identical cards". */
+.category-card--alt .category-icon {
+  color: var(--color-cream);
+  background: rgba(107, 48, 59, 0.35);
+  border-color: transparent;
+}
+
+.category-card:hover .category-icon {
+  transform: scale(1.06) rotate(-3deg);
+  color: var(--color-cream);
+  background: var(--color-wine);
+  border-color: transparent;
+}
+
+/* ---------- Text inside the block ---------- */
+
+.category-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.category-arrow {
+  opacity: 0;
+  transform: translate(-4px, 2px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.category-card:hover .category-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+  color: var(--color-accent-text);
+}
+
+.category-description {
+  display: block;
+  margin-top: 8px;
+
+  color: var(--color-muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.category-count {
+  display: inline-block;
+  margin-top: 16px;
+
+  color: rgba(166, 156, 152, 0.65);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- Featured (first) block spans two columns ---------- */
+
+.category-card--featured {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  gap: 22px;
+}
+
+.category-card--featured .category-text {
+  flex: 1;
+}
+
+.category-card--featured .category-count {
+  margin-top: 12px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* No more double-width block once the grid is only 2 columns */
+  .category-card--featured {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .categories-section {
+    padding: 80px 20px 60px;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}

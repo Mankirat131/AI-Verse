@@ -1,16 +1,43 @@
+/* ============================================
+   App shell + Navbar styling
+   The Navbar component's JSX is untouched —
+   this file only restyles its existing class names.
+   ============================================ */
+
 .app {
   min-height: 100vh;
-  background: #050505;
+  background: var(--color-bg);
 }
 
-/* Navbar */
+/* ---------- Navbar ---------- */
+/*
+  Floating style: no background and no border of its own,
+  positioned on top of the hero so the atmosphere shows through.
+*/
 
 .navbar {
-  height: 68px;
-  border-bottom: 1px solid #272022;
-  background: #050505;
+  position: absolute; /* floats over the hero instead of pushing it down */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  height: 76px;
+  animation: navbar-enter 0.7s ease-out both;
 }
 
+@keyframes navbar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Centered container — content never stretches across huge screens */
 .navbar-inner {
   max-width: 1200px;
   height: 100%;
@@ -20,98 +47,143 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
-/* Logo */
+/* ---------- Logo ---------- */
 
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  color: #f2e9dc;
+  color: var(--color-cream);
   text-decoration: none;
 
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 4px;
+
+  transition: opacity 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.85;
 }
 
 .logo span {
-  color: #8a4652;
-  font-size: 14px;
+  color: var(--color-accent-text);
+  font-size: 13px;
 }
 
-/* Navigation */
+/* ---------- Navigation links ---------- */
 
 .nav-links {
   display: flex;
-  gap: 36px;
+  align-items: center;
+  gap: 38px;
 }
 
 .nav-links a {
-  color: #a69c98;
+  color: var(--color-muted);
   text-decoration: none;
   font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover {
-  color: #f2e9dc;
+  color: var(--color-cream);
+  transform: translateY(-1px);
 }
 
-/* Right side */
+/* Hide the "Search" link label — the icon button covers that action */
+.nav-links a[href='#Search Tool'] {
+  display: none;
+}
+
+/* ---------- Right side actions ---------- */
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .search {
-  border: none;
-  background: none;
-  color: #a69c98;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  font-size: 22px;
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+
+  color: var(--color-muted);
+  font-size: 19px;
   cursor: pointer;
+
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.search:hover {
+  color: var(--color-cream);
+  background: rgba(20, 16, 17, 0.85);
 }
 
 .login {
   padding: 9px 17px;
 
-  color: #f2e9dc;
-  background: #0d0a0b;
-  border: 1px solid #272022;
-  border-radius: 8px;
+  color: var(--color-muted);
+  background: rgba(13, 10, 11, 0.6);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
 
   text-decoration: none;
   font-size: 13px;
+  font-weight: 500;
+
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.login:hover {
+  color: var(--color-cream);
+  border-color: rgba(138, 70, 82, 0.55);
 }
 
 .cta {
-  padding: 10px 20px;
+  padding: 10px 21px;
 
-  color: #f2e9dc;
-  background: #6b303b;
+  color: var(--color-cream);
+  background: var(--color-wine);
 
-  border-radius: 22px;
+  border-radius: 999px;
   text-decoration: none;
 
   font-size: 13px;
   font-weight: 600;
 
-  transition: 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .cta:hover {
-  background: #8a4652;
+  background: var(--color-wine-bright);
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px -14px rgba(107, 48, 59, 0.6);
 }
 
-/* Mobile */
+.cta:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Responsive ---------- */
 
 @media (max-width: 800px) {
   .nav-links {
@@ -120,5 +192,10 @@
 
   .login {
     display: none;
+  }
+
+  /* Give touch targets a bit more room */
+  .navbar-inner {
+    padding: 0 20px;
   }
 }

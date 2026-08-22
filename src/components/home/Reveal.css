@@ -1,0 +1,25 @@
+/*
+  The Reveal component starts hidden and slightly pushed down.
+  When the "is-visible" class is added by React, CSS transitions
+  it smoothly into view.
+*/
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect users who turn off animations in their OS settings */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

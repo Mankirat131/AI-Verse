@@ -6,6 +6,12 @@
   --color-surface-raised: #141011;
   --color-cream: #F2E9DC;
   --color-muted: #A69C98;
+
+  /* Atmosphere tones — used only for soft lighting, never large surfaces */
+  --color-espresso: #0B0708;
+  --color-violet: #54466B;
+  --color-accent-text: #C08A94; /* readable rose for small accent text */
+
   --color-wine: #6B303B;
   --color-wine-bright: #8A4652;
   --color-border: #272022;

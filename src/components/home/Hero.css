@@ -1,0 +1,195 @@
+/*
+  Hero section styling.
+  The hero fills the whole viewport; the background component
+  paints the atmosphere and the content sits centered on top.
+*/
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 120px 24px 90px; /* extra top space so content clears the navbar */
+  overflow: hidden;
+}
+
+/* Content sits above the decorative background layers */
+.hero-content {
+  position: relative;
+  z-index: 1;
+
+  max-width: 860px;
+  text-align: center;
+}
+
+/* ---------- Eyebrow ---------- */
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0 0 26px;
+
+  color: var(--color-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-wine-bright);
+}
+
+/* ---------- Headline ---------- */
+
+.hero-title {
+  margin: 0;
+
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: clamp(52px, 9vw, 104px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+/* The accent words get a soft cream-to-rose gradient —
+   noticeable but far from neon */
+.hero-title-accent {
+  background: linear-gradient(180deg, #f2e9dc 30%, #c08a94 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ---------- Supporting paragraph ---------- */
+
+.hero-description {
+  max-width: 520px;
+  margin: 28px auto 44px;
+
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* ---------- CTA buttons ---------- */
+/*
+  .btn-primary / .btn-secondary live here because they're currently
+  only used in the hero. Move them to index.css if you reuse them elsewhere.
+*/
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 13px 26px;
+
+  color: var(--color-cream);
+  background: var(--color-wine);
+  border-radius: 999px;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-wine-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -14px rgba(107, 48, 59, 0.65);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Minimal outlined secondary button */
+.btn-secondary {
+  padding: 13px 26px;
+
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+  color: var(--color-cream);
+  border-color: rgba(138, 70, 82, 0.55);
+  transform: translateY(-2px);
+}
+
+/* ---------- Scroll hint ---------- */
+/* A tiny line at the bottom that slowly pulses — quiet invitation to scroll */
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  z-index: 1;
+}
+
+.hero-scroll-hint span {
+  display: block;
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(180deg, rgba(192, 136, 148, 0.6), transparent);
+  animation: scroll-hint 2.4s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-hint span {
+    animation: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 700px) {
+  .hero {
+    padding-top: 110px;
+    padding-bottom: 70px;
+  }
+
+  .hero-description {
+    margin-bottom: 36px;
+    font-size: 15px;
+  }
+
+  .hero-actions {
+    margin-top: 30px;
+  }
+}

@@ -1,0 +1,26 @@
+/*
+  Page-level styles shared across the homepage.
+  Most section styling lives in each component's own CSS file —
+  this file only holds things that span the whole page.
+*/
+
+/* Soft violet ambient light behind the lower part of the page,
+   so the sections after the hero don't feel flat */
+.page-ambient {
+  position: fixed;
+  bottom: -320px;
+  left: 50%;
+  z-index: -1;
+
+  width: min(1000px, 90vw);
+  height: 520px;
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse 55% 60% at 50% 100%,
+    rgba(84, 70, 107, 0.1),
+    transparent 70%
+  );
+
+  pointer-events: none;
+}

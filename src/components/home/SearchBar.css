@@ -1,0 +1,150 @@
+/*
+  Search bar styling.
+  The input is a wide, calm surface that "wakes up" on focus:
+  the border warms to wine and a soft (not neon) glow appears.
+*/
+
+.search-area {
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 6px 6px 6px 20px;
+
+  background: rgba(13, 10, 11, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* Focus-within means: the input inside is focused */
+.search-bar:focus-within {
+  border-color: rgba(138, 70, 82, 0.65);
+  background: rgba(20, 16, 17, 0.9);
+  /* Soft wine glow — subtle, not a neon ring */
+  box-shadow: 0 0 0 1px rgba(138, 70, 82, 0.35),
+    0 8px 32px -12px rgba(107, 48, 59, 0.45);
+}
+
+.search-icon {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  transition: color 0.25s ease;
+}
+
+.search-bar:focus-within .search-icon {
+  color: var(--color-cream);
+}
+
+.search-input {
+  flex: 1; /* take all remaining space between icon and button */
+  min-width: 0;
+  padding: 12px 0;
+
+  color: var(--color-cream);
+  background: transparent;
+  border: none;
+  outline: none;
+
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+
+.search-input::placeholder {
+  color: rgba(166, 156, 152, 0.7);
+}
+
+.search-submit {
+  padding: 11px 22px;
+
+  color: var(--color-cream);
+  background: var(--color-wine);
+  border: none;
+  border-radius: 11px;
+
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-submit:hover {
+  background: var(--color-wine-bright);
+  transform: translateY(-1px);
+}
+
+.search-submit:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Suggested tags ---------- */
+
+.search-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.search-tags-label {
+  color: rgba(166, 156, 152, 0.6);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.search-tag {
+  padding: 7px 15px;
+
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+
+  font-size: 12.5px;
+  cursor: pointer;
+
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-tag:hover {
+  color: var(--color-cream);
+  border-color: rgba(138, 70, 82, 0.55);
+  transform: translateY(-1px);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 560px) {
+  .search-bar {
+    padding-left: 14px;
+    gap: 8px;
+  }
+
+  /* On very small screens the button moves under the input */
+  .search-bar {
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1 1 calc(100% - 44px);
+    padding-right: 8px;
+  }
+
+  .search-submit {
+    flex: 1;
+    margin-top: 4px;
+    padding: 12px;
+  }
+}
