@@ -22,7 +22,7 @@ function Hero() {
       <div className="hero-content">
         <Reveal>
           <p className="hero-eyebrow">
-            <span className="eyebrow-dot" />
+            <span className="eyebrow-star" aria-hidden="true">✦</span>
             Find the right AI tool for every task
           </p>
         </Reveal>
@@ -37,8 +37,8 @@ function Hero() {
 
         <Reveal delay={200}>
           <p className="hero-description">
-            Explore, compare and choose from thousands of curated AI tools —
-            a calm, beautiful map of artificial intelligence.
+            Explore, compare and discover the right AI tool for whatever
+            you're trying to accomplish.
           </p>
         </Reveal>
 
@@ -51,7 +51,7 @@ function Hero() {
           <div className="hero-actions">
             <a href="#categories" className="btn-primary">
               Explore AI Tools
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </a>

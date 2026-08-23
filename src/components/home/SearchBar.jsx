@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './SearchBar.css';
 
 // Suggested quick-search tags shown under the input
-const suggestedTags = ['Coding', 'Design', 'Writing', 'Research', 'Video', 'Productivity'];
+const suggestedTags = ['Coding', 'Design', 'Writing', 'Research', 'Video', 'Productivity', 'Marketing'];
 
 /*
   SearchBar — the main hero interaction.
@@ -49,7 +49,7 @@ function SearchBar() {
         <input
           type="text"
           className="search-input"
-          placeholder="What do you want to create?"
+          placeholder="What's your goal today?"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           aria-label="Search AI tools"

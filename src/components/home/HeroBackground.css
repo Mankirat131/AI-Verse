@@ -109,6 +109,61 @@
   filter: blur(6px);
 }
 
+/* The single brightest point — the "sun" everything orbits */
+.orb-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: rgba(233, 205, 210, 0.8);
+  box-shadow: 0 0 22px rgba(192, 136, 148, 0.55);
+}
+
+/* ---------- Quiet edge labels ---------- */
+/*
+  Category words placed near the hero edges at very low opacity.
+  They fill empty corners without competing with the headline.
+*/
+
+.hero-labels {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-label {
+  position: absolute;
+
+  color: rgba(242, 233, 220, 0.13);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.label-1 { top: 18%; left: 6%; }
+.label-2 { top: 30%; right: 7%; }
+.label-3 { bottom: 26%; left: 9%; }
+.label-4 { bottom: 14%; right: 12%; }
+.label-5 { top: 62%; right: 20%; }
+
+/* ---------- Smooth transition into the next section ---------- */
+/* A gradient strip at the bottom of the hero that fades
+   from transparent to the page background color */
+
+.hero-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 180px;
+  background: linear-gradient(180deg, transparent, var(--color-bg) 90%);
+}
+
 .orbit-ring {
   position: absolute;
   top: 50%;
@@ -132,25 +187,57 @@
   animation: orbit-spin 140s linear infinite reverse;
 }
 
-/* Small "nodes" sitting on the orbits, like distant planets */
-.orbit-ring::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(192, 136, 148, 0.5);
-}
-
-.orbit-ring-2::before {
-  background: rgba(150, 130, 175, 0.35);
+/* The outermost ring is slightly squashed into an ellipse,
+   which makes the "universe" feel less like a perfect target */
+.orbit-ring-3 {
+  width: 860px;
+  height: 780px;
+  margin: -390px 0 0 -430px;
+  border-color: rgba(138, 70, 82, 0.09);
+  transform: rotate(-8deg);
 }
 
 @keyframes orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ---------- Orbit nodes ---------- */
+/*
+  Six small dots scattered on/near the orbits.
+  Each is placed by hand (top/left percentages of .hero-universe)
+  — simple and easy to explain, no JS needed.
+*/
+
+.orbit-node {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(192, 136, 148, 0.45);
+}
+
+.node-1 { top: 12%; left: 30%; }
+.node-2 { top: 24%; right: 16%; }
+.node-3 { bottom: 20%; left: 18%; }
+.node-4 { bottom: 28%; right: 26%; }
+.node-5 { top: 55%; left: 6%; }
+.node-6 { top: 40%; right: 4%; }
+
+/* One node glows a little brighter, like a distant sun */
+.node-2 {
+  width: 7px;
+  height: 7px;
+  background: rgba(226, 190, 198, 0.75);
+  box-shadow: 0 0 14px rgba(192, 136, 148, 0.5);
+}
+
+/* Hide decorative extras on small screens so they never crowd the text */
+@media (max-width: 700px) {
+  .hero-labels,
+  .orbit-ring-3 {
+    display: none;
+  }
 }
 
 /* Pause all ambient motion for users who prefer reduced motion */
