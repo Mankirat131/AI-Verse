@@ -28,7 +28,9 @@ function SearchBar() {
   }
 
   return (
-    <div className="search-area">
+    // Wrapper lets the search bar stay narrow while the tags row
+    // stretches wider — that's what keeps all 7 tags on one line
+    <div className="search-block">
       <form className="search-bar" onSubmit={handleSubmit}>
         {/* Magnifying glass icon inside the input */}
         <svg

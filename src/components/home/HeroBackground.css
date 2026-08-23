@@ -136,32 +136,56 @@
 .hero-label {
   position: absolute;
 
-  color: rgba(242, 233, 220, 0.13);
+  color: rgba(242, 233, 220, 0.14);
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.label-1 { top: 18%; left: 6%; }
-.label-2 { top: 30%; right: 7%; }
-.label-3 { bottom: 26%; left: 9%; }
-.label-4 { bottom: 14%; right: 12%; }
-.label-5 { top: 62%; right: 20%; }
+/* A tiny node dot in front of each word ties the labels
+   into the orbital system visually */
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgba(192, 136, 148, 0.4);
+}
+
+/* Placed around the SIDES of the hero at mid-heights,
+   filling the empty left/right space beside the centered column */
+.label-1 { top: 22%; left: 4%; }
+.label-2 { top: 48%; right: 3%; }
+.label-3 { bottom: 24%; left: 6%; }
+.label-4 { top: 68%; right: 8%; }
+.label-5 { bottom: 12%; right: 26%; }
 
 /* ---------- Smooth transition into the next section ---------- */
-/* A gradient strip at the bottom of the hero that fades
-   from transparent to the page background color */
+/*
+  Two things happen near the bottom of the hero:
+  1. a whisper of wine light adds depth (atmosphere continues)
+  2. everything fades into the page background color,
+     so the next section feels like a continuation, not a cut
+*/
 
 .hero-fade {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 180px;
-  background: linear-gradient(180deg, transparent, var(--color-bg) 90%);
+  height: 260px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(107, 48, 59, 0.05) 45%,
+    var(--color-bg) 92%
+  );
 }
 
 .orbit-ring {
@@ -172,6 +196,7 @@
   border: 1px solid rgba(138, 70, 82, 0.16);
 }
 
+/* Inner ring: a true circle hugging the headline */
 .orbit-ring-1 {
   width: 460px;
   height: 460px;
@@ -179,20 +204,22 @@
   animation: orbit-spin 90s linear infinite;
 }
 
+/* Middle ring: squashed into an ellipse so it "wraps" the wide
+   content column instead of looking like a target behind it */
 .orbit-ring-2 {
-  width: 650px;
-  height: 650px;
-  margin: -325px 0 0 -325px;
+  width: 760px;
+  height: 560px;
+  margin: -280px 0 0 -380px;
   border-color: rgba(110, 95, 135, 0.12);
   animation: orbit-spin 140s linear infinite reverse;
 }
 
-/* The outermost ring is slightly squashed into an ellipse,
-   which makes the "universe" feel less like a perfect target */
+/* Outer ring: a wider, flatter ellipse tilted the other way —
+   together they read as one tilted solar system */
 .orbit-ring-3 {
-  width: 860px;
-  height: 780px;
-  margin: -390px 0 0 -430px;
+  width: 980px;
+  height: 700px;
+  margin: -350px 0 0 -490px;
   border-color: rgba(138, 70, 82, 0.09);
   transform: rotate(-8deg);
 }
@@ -200,6 +227,46 @@
 @keyframes orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ---------- Constellation lines ---------- */
+/*
+  Three thin gradient lines that suggest connections between nodes.
+  Each is just a 1px-tall div: transparent → faint color → transparent,
+  rotated into place. Purely decorative and very low contrast.
+*/
+
+.orbit-line {
+  position: absolute;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(192, 136, 148, 0.18),
+    transparent
+  );
+}
+
+.line-1 {
+  top: 20%;
+  left: 8%;
+  width: 42%;
+  transform: rotate(12deg);
+}
+
+.line-2 {
+  bottom: 24%;
+  left: 28%;
+  width: 40%;
+  transform: rotate(-9deg);
+}
+
+.line-3 {
+  top: 44%;
+  right: 6%;
+  width: 26%;
+  transform: rotate(58deg);
 }
 
 /* ---------- Orbit nodes ---------- */
@@ -217,12 +284,14 @@
   background: rgba(192, 136, 148, 0.45);
 }
 
-.node-1 { top: 12%; left: 30%; }
-.node-2 { top: 24%; right: 16%; }
-.node-3 { bottom: 20%; left: 18%; }
-.node-4 { bottom: 28%; right: 26%; }
-.node-5 { top: 55%; left: 6%; }
-.node-6 { top: 40%; right: 4%; }
+/* Positioned roughly along the ring edges so they feel like
+   part of the orbital system, not floating randomly */
+.node-1 { top: 5%; left: 52%; }
+.node-2 { top: 28%; right: 3%; }
+.node-3 { bottom: 10%; left: 15%; }
+.node-4 { bottom: 5%; right: 33%; }
+.node-5 { top: 58%; left: 0%; }
+.node-6 { top: 45%; right: -1%; }
 
 /* One node glows a little brighter, like a distant sun */
 .node-2 {
@@ -232,9 +301,11 @@
   box-shadow: 0 0 14px rgba(192, 136, 148, 0.5);
 }
 
-/* Hide decorative extras on small screens so they never crowd the text */
-@media (max-width: 700px) {
+/* Tablet: start reducing decoration — labels, lines and the
+   outer ellipse go first; stars and the two main rings stay */
+@media (max-width: 900px) {
   .hero-labels,
+  .orbit-line,
   .orbit-ring-3 {
     display: none;
   }

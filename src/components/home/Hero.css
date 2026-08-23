@@ -12,7 +12,10 @@
   align-items: center;
   justify-content: center;
 
-  padding: 120px 24px 90px; /* extra top space so content clears the navbar */
+  /* Bottom padding is larger than the top, which lifts the content
+     slightly above true center — where a landing page "rests" —
+     and leaves calm space for the scroll hint and bottom fade */
+  padding: 110px 24px 150px;
   overflow: hidden;
 }
 
@@ -21,7 +24,7 @@
   position: relative;
   z-index: 1;
 
-  max-width: 860px;
+  max-width: 880px;
   text-align: center;
 }
 
@@ -32,7 +35,7 @@
   align-items: center;
   gap: 10px;
 
-  margin: 0 0 26px;
+  margin: 0 0 22px; /* tight to the headline — they belong together */
 
   color: var(--color-muted);
   font-size: 11.5px;
@@ -72,8 +75,8 @@
 /* ---------- Supporting paragraph ---------- */
 
 .hero-description {
-  max-width: 520px;
-  margin: 28px auto 44px;
+  max-width: 500px;
+  margin: 26px auto 40px;
 
   color: var(--color-muted);
   font-size: 16px;
@@ -91,7 +94,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 14px;
-  margin-top: 36px;
+  margin-top: 30px; /* closer to the tags above = search + tags + CTAs read as one unit */
 }
 
 .btn-primary {

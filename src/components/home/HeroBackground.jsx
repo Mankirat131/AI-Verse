@@ -42,6 +42,11 @@ function HeroBackground() {
         <span className="orbit-node node-5" />
         <span className="orbit-node node-6" />
 
+        {/* Faint lines connecting some nodes, like a constellation map */}
+        <span className="orbit-line line-1" />
+        <span className="orbit-line line-2" />
+        <span className="orbit-line line-3" />
+
         {/* The slightly brighter central light */}
         <div className="orb-core" />
         <span className="orb-center-dot" />
