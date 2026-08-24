@@ -1,6 +1,7 @@
 import Reveal from './Reveal.jsx';
 import './TrendingTools.css';
 import tools from '../../data/tools.js';
+import { logToolClick } from "../util/activityTracker";
 
 /*
   TrendingTools — a preview grid of popular AI tools.

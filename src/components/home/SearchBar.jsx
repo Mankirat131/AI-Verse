@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './SearchBar.css';
+import { logSearch } from "../util/activityTracker";
 
 // Suggested quick-search tags shown under the input
 const suggestedTags = ['Coding', 'Design', 'Writing', 'Research', 'Video', 'Productivity', 'Marketing'];
