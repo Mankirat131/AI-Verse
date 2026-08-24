@@ -7,7 +7,7 @@ import Compare from "./pages/Compare.jsx";
 import Recommendations from "./pages/Recommendations.jsx";
 import Search from "./pages/Search.jsx";
 import Login from "./pages/Login.jsx";
-import About from "./pages/About.jsx";
+
 
 /*
   App — the root component.
@@ -28,7 +28,7 @@ function App() {
         <Route path="/compare" element={<Compare />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/login" element={<Login />} />
-         <Route path="/about" element={<About />} />
+
       </Routes>
     </BrowserRouter>
   );

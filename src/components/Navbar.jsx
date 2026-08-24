@@ -15,7 +15,7 @@ function Navbar() {
           <Link to="/categories">Categories</Link>
           <Link to="/compare">Compare</Link>
           <Link to="/recommendations">Recommendations</Link>
-          <Link to="/about">About</Link>
+
         </div>
 
         <div className="nav-actions">
