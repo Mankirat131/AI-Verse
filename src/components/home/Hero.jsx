@@ -2,13 +2,6 @@ import HeroBackground from './HeroBackground.jsx';
 import Reveal from './Reveal.jsx';
 import './Hero.css';
 
-/*
-  Hero — the first full-viewport screen.
-
-  The homepage now keeps the hero focused on the AI-Verse identity.
-  Tool search is handled on the dedicated AI Finder page.
-*/
-
 function Hero() {
   return (
     <section className="hero">
