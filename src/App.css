@@ -1,27 +1,14 @@
-/* ============================================
-   App shell + Navbar styling
-   The Navbar component's JSX is untouched —
-   this file only restyles its existing class names.
-   ============================================ */
-
 .app {
   min-height: 100vh;
   background: var(--color-bg);
 }
 
-/* ---------- Navbar ---------- */
-/*
-  Floating style: no background and no border of its own,
-  positioned on top of the hero so the atmosphere shows through.
-*/
-
 .navbar {
-  position: absolute; /* floats over the hero instead of pushing it down */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-
   height: 72px;
   animation: navbar-enter 0.7s ease-out both;
 }
@@ -37,34 +24,27 @@
   }
 }
 
-/* Centered container — content never stretches across huge screens */
 .navbar-inner {
   max-width: 1200px;
   height: 100%;
   margin: auto;
   padding: 0 24px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
 }
 
-/* ---------- Logo ---------- */
-
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
-
   color: var(--color-cream);
   text-decoration: none;
-
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 4px;
-
   transition: opacity 0.2s ease;
 }
 
@@ -76,8 +56,6 @@
   color: var(--color-accent-text);
   font-size: 13px;
 }
-
-/* ---------- Navigation links ---------- */
 
 .nav-links {
   display: flex;
@@ -91,7 +69,6 @@
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
-
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -99,13 +76,6 @@
   color: var(--color-cream);
   transform: translateY(-1px);
 }
-
-/* Hide the "Search" link label — the icon button covers that action */
-.nav-links a[href='#Search Tool'] {
-  display: none;
-}
-
-/* ---------- Right side actions ---------- */
 
 .nav-actions {
   display: flex;
@@ -117,18 +87,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 36px;
   height: 36px;
-
   border: none;
   border-radius: 9px;
   background: transparent;
-
   color: var(--color-muted);
   font-size: 19px;
   cursor: pointer;
-
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -139,16 +105,13 @@
 
 .login {
   padding: 9px 17px;
-
   color: var(--color-muted);
   background: rgba(13, 10, 11, 0.6);
   border: 1px solid var(--color-border);
   border-radius: 9px;
-
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
-
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
@@ -159,18 +122,13 @@
 
 .cta {
   padding: 10px 21px;
-
   color: var(--color-cream);
   background: var(--color-wine);
-
   border-radius: 999px;
   text-decoration: none;
-
   font-size: 13px;
   font-weight: 600;
-
-  transition: background-color 0.2s ease, transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .cta:hover {
@@ -183,8 +141,6 @@
   transform: scale(0.97);
 }
 
-/* ---------- Responsive ---------- */
-
 @media (max-width: 800px) {
   .nav-links {
     display: none;
@@ -194,7 +150,6 @@
     display: none;
   }
 
-  /* Give touch targets a bit more room */
   .navbar-inner {
     padding: 0 20px;
   }
