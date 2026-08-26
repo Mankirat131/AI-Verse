@@ -1,22 +1,17 @@
 import HeroBackground from './HeroBackground.jsx';
-import SearchBar from './SearchBar.jsx';
 import Reveal from './Reveal.jsx';
 import './Hero.css';
 
 /*
   Hero — the first full-viewport screen.
 
-  Structure:
-  - <HeroBackground /> draws the atmosphere BEHIND everything
-  - the content column holds: eyebrow, headline, paragraph,
-    search bar and the two CTA buttons
-  - <Reveal> gives the content a gentle entrance animation
+  The homepage now keeps the hero focused on the AI-Verse identity.
+  Tool search is handled on the dedicated AI Finder page.
 */
 
 function Hero() {
   return (
     <section className="hero">
-      {/* Decorative layers — no text, no interaction */}
       <HeroBackground />
 
       <div className="hero-content">
@@ -42,12 +37,7 @@ function Hero() {
           </p>
         </Reveal>
 
-        {/* The main hero interaction */}
         <Reveal delay={300}>
-          <SearchBar />
-        </Reveal>
-
-        <Reveal delay={400}>
           <div className="hero-actions">
             <a href="#categories" className="btn-primary">
               Explore AI Tools
@@ -63,7 +53,6 @@ function Hero() {
         </Reveal>
       </div>
 
-      {/* Subtle scroll hint at the bottom of the screen */}
       <div className="hero-scroll-hint" aria-hidden="true">
         <span />
       </div>
