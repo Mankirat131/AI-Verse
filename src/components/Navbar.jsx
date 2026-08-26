@@ -1,10 +1,9 @@
-
 import { Link } from 'react-router-dom';
+
 function Navbar() {
-  return<>
+  return (
     <nav className="navbar">
       <div className="navbar-inner">
-
         <a href="/" className="logo">
           <span>◇</span> AI-VERSE
         </a>
@@ -15,7 +14,6 @@ function Navbar() {
           <Link to="/categories">Categories</Link>
           <Link to="/compare">Compare</Link>
           <Link to="/recommendations">Recommendations</Link>
-
         </div>
 
         <div className="nav-actions">
@@ -23,10 +21,9 @@ function Navbar() {
           <Link to="/login" className="login">Log in</Link>
           <Link to="/search" className="cta">Explore AI</Link>
         </div>
-
       </div>
     </nav>
-  </>
+  );
 }
 
 export default Navbar;
