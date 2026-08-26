@@ -2,13 +2,6 @@ import Reveal from './Reveal.jsx';
 import './CategorySection.css';
 import categories from '../../data/categories.js';
 
-/*
-  Minimal line icons for each category, drawn as inline SVG.
-  They live in a plain object so we can look them up by id:
-  icons['coding'], icons['design'], etc.
-  stroke="currentColor" means the icon inherits the CSS text color,
-  which makes hover color changes automatic.
-*/
 
 const icons = {
   coding: (
@@ -37,15 +30,6 @@ const icons = {
   productivity: <path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z" />,
 };
 
-/*
-  CategorySection — "Explore the AI Universe".
-
-  Maps over the static categories array and renders one block each.
-  The blocks intentionally do NOT all look identical:
-  - the first ("featured") one spans two grid columns
-  - even/odd rows alternate between a filled and an outlined icon chip
-  which keeps the layout feeling designed rather than templated.
-*/
 
 function CategorySection() {
   return (
@@ -75,7 +59,7 @@ function CategorySection() {
                   .filter(Boolean)
                   .join(' ')}
                 onClick={(event) => {
-                  event.preventDefault(); // '#' hrefs shouldn't jump the page
+                  event.preventDefault(); 
                   console.log('Category clicked:', category.name);
                 }}
               >
