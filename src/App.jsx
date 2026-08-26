@@ -8,15 +8,6 @@ import Recommendations from "./pages/Recommendations.jsx";
 import Search from "./pages/Search.jsx";
 import Login from "./pages/Login.jsx";
 
-
-/*
-  App — the root component.
-
-  The Navbar stays mounted above every page.
-  HomePage holds all the homepage sections
-  (hero, search, categories, trending tools).
-*/
-
 function App() {
   return (
     <BrowserRouter>
@@ -28,7 +19,6 @@ function App() {
         <Route path="/compare" element={<Compare />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/login" element={<Login />} />
-
       </Routes>
     </BrowserRouter>
   );
