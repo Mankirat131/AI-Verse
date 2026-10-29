@@ -1,243 +1,373 @@
-// src/pages/Recommendations.jsx
-//
-// Personalized "AI Universe" dashboard.
-// Uses only useState + useEffect + localStorage, per your current React level.
-// Reads activity logged by src/utils/activityTracker.js and turns it into
-// a profile, an activity chart, top tools, recommendations, and a workflow.
+import { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
+import tools, { getToolLink } from "../data/tools";
+import {
+  getActivityData,
+  getSavedTools,
+  toggleSavedTool,
+  clearRecentLog,
+  clearActivity,
+  logToolOpen,
+  finishToolVisit,
+} from "../components/util/activityTracker";
+import { getRecommendations, isUsefulLogEntry, formatDuration } from "../components/util/recommendationEngine";
+import "./Recommendations.css";
 
-import { useState, useEffect } from "react";
-import tools from "../data/tools";
-import { getActivityData } from "../components/util/activityTracker";
+const SLICE_COLORS = ["#c9765a", "#3b82f6", "#10b981", "#a855f7", "#f59e0b", "#6b7280"];
 
+// One reusable bar (used by "Your AI Profile" and "Time Distribution")
+function BarRow({ label, percent, color, animate }) {
+  return (
+    <div className="rec-bar">
+      <div className="rec-bar-top">
+        <span>{label}</span>
+        <span>{percent}%</span>
+      </div>
+      <div className="rec-bar-track">
+        <div
+          className="rec-bar-fill"
+          style={{ width: animate ? `${percent}%` : "0%", backgroundColor: color }}
+        />
+      </div>
+    </div>
+  );
+}
 
-// Suggested tool pipeline per category. Adjust names to match your tools.js
-const workflowMap = {
-  Writing: ["Perplexity", "ChatGPT", "Claude"],
-  Coding: ["ChatGPT", "GitHub Copilot", "Claude"],
-  Design: ["Midjourney", "ChatGPT"],
-  Video: ["Runway", "ChatGPT"],
-  Research: ["Perplexity", "Claude", "ChatGPT"],
-};
+// Donut ("wheel") chart: one arc per tool, sized by time spent
+function Donut({ items, totalSeconds, animate }) {
+  const radius = 48;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
 
-const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return (
+    <div className="rec-donut-wrap">
+      <svg className="rec-donut" viewBox="0 0 120 120" role="img" aria-label="Time spent per tool">
+        <circle className="rec-donut-ring" cx="60" cy="60" r={radius} />
+        {items.map((item, i) => {
+          const length = (item.seconds / totalSeconds) * circumference;
+          const circle = (
+            <circle
+              key={item.name}
+              className="rec-donut-slice"
+              cx="60"
+              cy="60"
+              r={radius}
+              stroke={SLICE_COLORS[i % SLICE_COLORS.length]}
+              strokeDasharray={`${animate ? length : 0} ${circumference}`}
+              strokeDashoffset={-offset}
+            />
+          );
+          offset += length;
+          return circle;
+        })}
+        <text className="rec-donut-total" x="60" y="58" textAnchor="middle">{formatDuration(totalSeconds)}</text>
+        <text className="rec-donut-sub" x="60" y="74" textAnchor="middle">total</text>
+      </svg>
+
+      <ul className="rec-donut-legend">
+        {items.map((item, i) => (
+          <li key={item.name}>
+            <span className="rec-donut-dot" style={{ backgroundColor: SLICE_COLORS[i % SLICE_COLORS.length] }} />
+            <span className="rec-donut-name">{item.name}</span>
+            <span className="rec-donut-value">{item.percent}% · {formatDuration(item.seconds)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// One reusable KPI card
+function KpiCard({ icon, label, value, badge, isUp }) {
+  return (
+    <div className="rec-kpi-card">
+      <div className="rec-kpi-top">
+        <div className="rec-kpi-icon">{icon}</div>
+        <span className={`rec-kpi-badge ${isUp ? "is-up" : "is-down"}`}>{badge}</span>
+      </div>
+      <span className="rec-kpi-label">{label}</span>
+      <strong className="rec-kpi-value">{value}</strong>
+    </div>
+  );
+}
+
+const trend = (diff) => `${diff >= 0 ? "↑" : "↓"} ${Math.abs(diff)}`;
 
 function Recommendations() {
-  const [activity, setActivity] = useState(null);
+  const [activity, setActivity] = useState(getActivityData);
+  const [savedTools, setSavedTools] = useState(getSavedTools);
+  const [rangeDays, setRangeDays] = useState(7);
+  const [animate, setAnimate] = useState(false);
 
-  // Load activity data once, when the page first renders
+  // If you land here right after visiting a tool, record that visit first
   useEffect(() => {
-    const data = getActivityData();
-    setActivity(data);
+    finishToolVisit();
+    setActivity(getActivityData());
   }, []);
 
-  // First render, before useEffect has run yet
-  if (!activity) {
-    return (
-      <div className="rec-page">
-        <p className="rec-loading">Loading your activity...</p>
-      </div>
-    );
+  // Bars start at 0 and grow once the page has mounted
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimate(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Coming back from a tool's tab: pick up the view that was just logged
+  useEffect(() => {
+    const onFocus = () => {
+      finishToolVisit(); // adds the time spent on the tool you just visited
+      setActivity(getActivityData());
+      setSavedTools(getSavedTools());
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
+
+  const data = useMemo(
+    () => getRecommendations({ activity, tools, savedTools, rangeDays }),
+    [activity, savedTools, rangeDays]
+  );
+
+  function reload() {
+    setActivity(getActivityData());
+    setSavedTools(getSavedTools());
+  }
+
+  function handleClearHistory() {
+    clearRecentLog();
+    reload();
+  }
+
+  function handleReset() {
+    if (!window.confirm("Reset all your activity and saved tools?")) return;
+    clearActivity();
+    reload();
   }
 
   const hasActivity =
-    Object.keys(activity.toolClicks).length > 0 ||
-    Object.keys(activity.categoryVisits).length > 0 ||
-    activity.searchCount > 0;
+    activity.events.length > 0 || Object.keys(activity.toolClicks).length > 0 || savedTools.length > 0;
 
-  // ---------- Empty state: brand new visitor, nothing tracked yet ----------
   if (!hasActivity) {
     return (
       <div className="rec-page">
         <div className="rec-empty">
-          <span className="rec-empty-icon">&#9671;</span>
-          <h1>Your AI Universe is empty — for now</h1>
+          <span className="rec-empty-icon">◇</span>
+          <h1>Your AI Universe is empty for now</h1>
           <p>
-            Explore a few tools, run a search, or browse a category. Come
-            back here and AI-Verse will start building your personal
-            recommendations.
+            Explore a few tools, run a search, or browse a category. Come back here and
+            AI-Verse will start building your personal recommendations.
           </p>
-          <a href="/search" className="rec-cta">
-            Start exploring →
-          </a>
+          <Link to="/search" className="rec-cta">Start exploring →</Link>
         </div>
       </div>
     );
   }
 
-  // ---------- Derived stats (plain JS, no extra state needed) ----------
-
-  const totalViews = Object.values(activity.toolClicks).reduce(
-    (sum, count) => sum + count,
-    0
-  );
-
-  const totalCategoryVisits = Object.values(activity.categoryVisits).reduce(
-    (sum, count) => sum + count,
-    0
-  );
-
-  const categoriesExplored = Object.keys(activity.categoryVisits).length;
-
-  // Category breakdown, highest first
-  const categoryBreakdown = Object.entries(activity.categoryVisits)
-    .map(([category, count]) => ({
-      category,
-      count,
-      percent: Math.round((count / totalCategoryVisits) * 100),
-    }))
-    .sort((a, b) => b.count - a.count);
-
-  const topCategory = categoryBreakdown.length > 0 ? categoryBreakdown[0].category : null;
-
-  // Top tools, highest first
-  const topTools = Object.entries(activity.toolClicks)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
-
-  // Activity grouped by day of week, from the recent log
-  const dayCounts = [0, 0, 0, 0, 0, 0, 0];
-  activity.recentLog.forEach((entry) => {
-    const day = new Date(entry.date).getDay();
-    dayCounts[day] += 1;
-  });
-  const maxDayCount = Math.max(...dayCounts, 1);
-
-  // Recommended tools: unvisited tools from the top category
-  const recommended = tools.filter(
-    (tool) => tool.category === topCategory && !activity.toolClicks[tool.name]
-  );
-
-  // Fallback if everything in the top category has already been viewed
-  const suggestedTools =
-    recommended.length > 0
-      ? recommended.slice(0, 3)
-      : tools.filter((tool) => tool.category !== topCategory).slice(0, 3);
-
-  const workflow = workflowMap[topCategory] || [];
+  const maxDay = Math.max(...data.weekly.map((d) => d.count), 1);
+  const recentLog = activity.recentLog.filter((entry) => isUsefulLogEntry(entry.message)).slice(0, 8);
 
   return (
     <div className="rec-page">
-      {/* Banner */}
-      <div className="rec-banner">
-        <p className="rec-eyebrow">Your AI Universe</p>
-        <h1>AI-Verse is learning how you work.</h1>
-        <div className="rec-stats">
-          <div className="rec-stat">
-            <span className="rec-stat-num">{totalViews}</span>
-            <span className="rec-stat-label">tools viewed</span>
-          </div>
-          <div className="rec-stat">
-            <span className="rec-stat-num">{activity.searchCount}</span>
-            <span className="rec-stat-label">searches</span>
-          </div>
-          <div className="rec-stat">
-            <span className="rec-stat-num">{categoriesExplored}</span>
-            <span className="rec-stat-label">categories</span>
-          </div>
+      {/* Header + controls */}
+      <div className="rec-header">
+        <div>
+          <p className="rec-eyebrow">Your AI universe</p>
+          <h1 className="rec-title">Welcome back, Explorer</h1>
+        </div>
+        <div className="rec-controls">
+          <select
+            className="rec-control"
+            value={rangeDays}
+            onChange={(e) => setRangeDays(Number(e.target.value))}
+            aria-label="Date range"
+          >
+            <option value={7}>Last 7 days</option>
+            <option value={30}>Last 30 days</option>
+          </select>
+          <button className="rec-control" onClick={reload}>↻ Refresh</button>
+          <button className="rec-control" onClick={handleReset}>Reset data</button>
         </div>
       </div>
 
-      {/* Profile bars */}
+      {/* KPI cards */}
+      <div className="rec-kpi-grid">
+        <KpiCard
+          icon="👁"
+          label="Tools viewed"
+          value={data.views}
+          badge={trend(data.views - data.prevViews)}
+          isUp={data.views >= data.prevViews}
+        />
+        <KpiCard
+          icon="🔍"
+          label="Searches"
+          value={data.searches}
+          badge={trend(data.searches - data.prevSearches)}
+          isUp={data.searches >= data.prevSearches}
+        />
+        <KpiCard
+          icon="⚡"
+          label="Top category"
+          value={data.topCategory}
+          badge={`${data.topPercent}%`}
+          isUp
+        />
+        <KpiCard
+          icon="🎯"
+          label="Profile match score"
+          value={`${data.confidence}%`}
+          badge={data.confidence >= 50 ? "↑ High" : "↓ Low"}
+          isUp={data.confidence >= 50}
+        />
+      </div>
+
+      {/* AI profile */}
       <section className="rec-section">
-        <h2>Your AI Profile</h2>
+        <h2 className="rec-heading">Your AI profile</h2>
         <div className="rec-profile">
-          {categoryBreakdown.map((item, index) => (
-            <div className="rec-bar-row" key={item.category}>
-              <span className="rec-bar-label">{item.category}</span>
-              <div className="rec-bar-track">
-                <div
-                  className={"rec-bar-fill" + (index === 0 ? " is-top" : "")}
-                  style={{ width: item.percent + "%" }}
-                ></div>
-              </div>
-              <span className="rec-bar-percent">{item.percent}%</span>
-            </div>
+          {data.profile.map((item, index) => (
+            <BarRow
+              key={item.category}
+              label={item.category}
+              percent={item.percent}
+              color={index === 0 && item.percent > 0 ? "var(--rec-accent)" : "var(--rec-text-muted)"}
+              animate={animate}
+            />
           ))}
         </div>
       </section>
 
-      {/* Activity chart + top tools, side by side */}
+      {/* Weekly activity + Time distribution */}
       <section className="rec-section rec-split">
-        <div>
-          <h2>Your Activity</h2>
+        <div className="rec-panel">
+          <h3 className="rec-panel-title">Your activity · last 7 days</h3>
           <div className="rec-chart">
-            {dayCounts.map((count, index) => (
-              <div className="rec-chart-col" key={DAY_LABELS[index]}>
-                <div
-                  className="rec-chart-bar"
-                  style={{ height: (count / maxDayCount) * 100 + "%" }}
-                ></div>
-                <span className="rec-chart-label">{DAY_LABELS[index]}</span>
+            {data.weekly.map((day, i) => (
+              <div className="rec-chart-col" key={i}>
+                <div className="rec-chart-track">
+                  <div
+                    className="rec-chart-bar"
+                    data-count={day.count}
+                    title={`${day.label}: ${day.count} ${day.count === 1 ? "action" : "actions"}`}
+                    style={{ height: animate ? `${(day.count / maxDay) * 100}%` : "0%" }}
+                  />
+                </div>
+                <span className="rec-chart-label">{day.label}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div>
-          <h2>Top Tools</h2>
-          <ol className="rec-top-tools">
-            {topTools.map((tool, index) => (
+        <div className="rec-panel">
+          <div className="rec-panel-head">
+            <h3 className="rec-panel-title">Time on tools</h3>
+            <span
+              className="rec-info"
+              title="Estimated: the time between clicking View Tool and coming back to AI-Verse."
+            >
+              ⓘ
+            </span>
+          </div>
+
+          {data.toolTime.totalSeconds === 0 ? (
+            <p className="rec-muted-note">
+              Open a tool with "View Tool" and come back. We will estimate how long you spent there.
+            </p>
+          ) : (
+            <Donut items={data.toolTime.items} totalSeconds={data.toolTime.totalSeconds} animate={animate} />
+          )}
+        </div>
+      </section>
+
+      {/* Recommendations */}
+      <section className="rec-section">
+        <div className="rec-section-head">
+          <h2 className="rec-heading">Recommended for your workflow</h2>
+          {data.isFallback && (
+            <span className="rec-fallback-note">
+              Explore a few more tools to unlock personalised recommendations.
+            </span>
+          )}
+        </div>
+
+        {data.recommendations.length === 0 ? (
+          <p className="rec-muted-note">You have already explored every tool we have. Check back soon.</p>
+        ) : (
+          <div className="rec-tool-grid">
+            {data.recommendations.map((tool) => {
+              const isSaved = savedTools.includes(tool.name);
+              return (
+                <div className="rec-tool-card" key={tool.id || tool.name}>
+                  <div className="rec-card-top">
+                    <span className="rec-tool-tag">{tool.category}</span>
+                    <div className="rec-card-actions">
+                      {tool.matchScore !== null && (
+                        <span className="rec-match-badge">{tool.matchScore}% match</span>
+                      )}
+                      <button
+                        className={`rec-save-btn ${isSaved ? "is-saved" : ""}`}
+                        onClick={() => setSavedTools(toggleSavedTool(tool.name))}
+                        aria-label={isSaved ? `Unsave ${tool.name}` : `Save ${tool.name}`}
+                        aria-pressed={isSaved}
+                      >
+                        {isSaved ? "♥" : "♡"}
+                      </button>
+                    </div>
+                  </div>
+                  <h3>{tool.name}</h3>
+                  <p>{tool.description}</p>
+                  <span className="rec-tool-reason">{tool.reason}</span>
+                  <a
+                    className="rec-visit"
+                    href={getToolLink(tool)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => logToolOpen(tool)}
+                  >
+                    Visit tool →
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Top tools */}
+      <section className="rec-section">
+        <h2 className="rec-heading">Top tools</h2>
+        {data.topTools.length === 0 ? (
+          <p className="rec-muted-note">No tools viewed yet.</p>
+        ) : (
+          <ol className="rec-list">
+            {data.topTools.map((tool, index) => (
               <li key={tool.name}>
-                <span className="rec-rank">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="rec-tool-name">{tool.name}</span>
-                <span className="rec-tool-count">{tool.count}×</span>
+                <span className="rec-rank">{String(index + 1).padStart(2, "0")}</span>
+                <span className="rec-list-text">{tool.name}</span>
+                <span className="rec-list-meta">{tool.count}×</span>
               </li>
             ))}
           </ol>
-        </div>
+        )}
       </section>
 
-      {/* Recommended tools */}
+      {/* Recent activity */}
       <section className="rec-section">
-        <h2>Recommended For Your Workflow</h2>
-        <div className="rec-tool-grid">
-          {suggestedTools.map((tool) => (
-            <div className="rec-tool-card" key={tool.id}>
-              <div className="rec-tool-tag">{tool.category}</div>
-              <h3>{tool.name}</h3>
-              <p>{tool.description}</p>
-              <span className="rec-tool-reason">
-                Because you explore {tool.category.toLowerCase()} often
-              </span>
-            </div>
-          ))}
+        <div className="rec-section-head">
+          <h2 className="rec-heading">Recent activity</h2>
+          <button className="rec-link-btn" onClick={handleClearHistory}>Clear history</button>
         </div>
-      </section>
-
-      {/* Suggested workflow */}
-      {workflow.length > 0 && (
-        <section className="rec-section">
-          <h2>Your Suggested Workflow</h2>
-          <div className="rec-workflow">
-            {workflow.map((step, index) => (
-              <div className="rec-workflow-step" key={step}>
-                <span>{step}</span>
-                {index < workflow.length - 1 && (
-                  <span className="rec-arrow">→</span>
-                )}
-              </div>
+        {recentLog.length === 0 ? (
+          <p className="rec-muted-note">No recent activity.</p>
+        ) : (
+          <ul className="rec-list">
+            {recentLog.map((entry, index) => (
+              <li key={index}>
+                <span className="rec-dot" />
+                <span className="rec-list-text">{entry.message}</span>
+              </li>
             ))}
-          </div>
-        </section>
-      )}
-
-      {/* Recent activity log */}
-      <section className="rec-section">
-        <h2>Recent Activity</h2>
-        <ul className="rec-log">
-          {activity.recentLog.slice(0, 8).map((entry, index) => (
-            <li key={index}>
-              <span className="rec-log-dot"></span>
-              <span className="rec-log-text">{entry.message}</span>
-              <span className="rec-log-time">
-                {new Date(entry.date).toLocaleDateString()}
-              </span>
-            </li>
-          ))}
-        </ul>
+          </ul>
+        )}
       </section>
     </div>
   );
