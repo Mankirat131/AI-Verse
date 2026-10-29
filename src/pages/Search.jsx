@@ -1,6 +1,7 @@
 import { useState } from "react";
-import tools from "../data/tools";
-import { logSearch, logToolClick } from "../components/util/activityTracker";
+import tools, { getToolLink } from "../data/tools";
+import { logSearch, logToolOpen } from "../components/util/activityTracker";
+import { matchCategories } from "../components/util/categoryKeywords";
 import "./Search.css";
 
 const suggestions = [
@@ -12,23 +13,12 @@ const suggestions = [
   "Improve my productivity",
 ];
 
-const taskKeywords = {
-  Coding: ["code", "coding", "program", "programming", "debug", "developer", "website", "app"],
-  Design: ["image", "design", "logo", "ui", "visual", "presentation", "poster", "creative"],
-  Writing: ["write", "writing", "article", "blog", "essay", "content", "copy", "script"],
-  Research: ["research", "paper", "study", "summarize", "summary", "academic", "information"],
-  Video: ["video", "edit video", "movie", "reel", "caption", "animation"],
-  Productivity: ["productivity", "workflow", "task", "automate", "notes", "organize", "work"],
-};
-
 function getMatches(query) {
   const text = query.toLowerCase().trim();
 
   if (!text) return [];
 
-  const matchedCategories = Object.entries(taskKeywords)
-    .filter(([, keywords]) => keywords.some((keyword) => text.includes(keyword)))
-    .map(([category]) => category);
+  const matchedCategories = matchCategories(text);
 
   return tools.filter((tool) => {
     const searchableText = `${tool.name} ${tool.description} ${tool.category}`.toLowerCase();
@@ -65,7 +55,7 @@ function Search() {
   }
 
   function handleToolClick(tool) {
-    logToolClick(tool);
+    logToolOpen(tool);
   }
 
   return (
@@ -163,13 +153,15 @@ function Search() {
                     <span className="tool-category">{tool.category}</span>
                   </div>
 
-                  <button
+                  <a
                     className="tool-action"
-                    type="button"
+                    href={getToolLink(tool)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => handleToolClick(tool)}
                   >
                     View Tool <span>→</span>
-                  </button>
+                  </a>
                 </article>
               ))}
             </div>

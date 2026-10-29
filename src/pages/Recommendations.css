@@ -1,0 +1,606 @@
+/* src/pages/Recommendations.css
+   Everything is scoped with the .rec- prefix. Change colours in one place (.rec-page). */
+
+.rec-page {
+  --rec-bg: #0a0a0a;
+  --rec-surface: #121212;
+  --rec-surface-2: #1f1f1f;
+  --rec-border: #242424;
+  --rec-text: #f2f2f2;
+  --rec-text-muted: #8a8a8a;
+  --rec-accent: #c9765a;
+  --rec-accent-soft: rgba(201, 118, 90, 0.14);
+
+  background-color: var(--rec-bg);
+  color: var(--rec-text);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+}
+
+.rec-page h1,
+.rec-page h2,
+.rec-page h3,
+.rec-page p {
+  margin: 0;
+}
+
+/* ---------- Shared pieces ---------- */
+
+.rec-section {
+  margin-bottom: 48px;
+}
+
+.rec-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rec-border);
+}
+
+.rec-heading {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rec-text-muted);
+}
+
+/* a heading that is not inside .rec-section-head gets its own underline */
+.rec-section > .rec-heading {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rec-border);
+}
+
+.rec-panel {
+  background: var(--rec-surface);
+  border: 1px solid var(--rec-border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.rec-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.rec-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--rec-text);
+}
+
+.rec-panel > .rec-panel-title {
+  margin-bottom: 18px;
+}
+
+.rec-info {
+  color: var(--rec-text-muted);
+  font-size: 14px;
+  cursor: help;
+}
+
+.rec-muted-note {
+  color: var(--rec-text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 28px 0;
+}
+
+.rec-section > .rec-muted-note {
+  text-align: left;
+  padding: 0;
+}
+
+.rec-link-btn {
+  background: none;
+  border: none;
+  color: var(--rec-accent);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.rec-fallback-note {
+  font-size: 12px;
+  color: var(--rec-accent);
+}
+
+/* ---------- Empty state ---------- */
+
+.rec-empty {
+  max-width: 480px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.rec-empty-icon {
+  display: inline-block;
+  font-size: 28px;
+  color: var(--rec-accent);
+  margin-bottom: 16px;
+}
+
+.rec-empty h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.rec-empty p {
+  color: var(--rec-text-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.rec-cta {
+  display: inline-block;
+  background-color: var(--rec-accent);
+  color: var(--rec-bg);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+/* ---------- Header ---------- */
+
+.rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rec-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--rec-accent);
+  margin-bottom: 6px;
+}
+
+.rec-title {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.rec-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.rec-control {
+  background: #141414;
+  border: 1px solid #262626;
+  color: #d4d4d4;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ---------- KPI cards (4 / 2 / 1 columns) ---------- */
+
+.rec-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.rec-kpi-card {
+  background: var(--rec-surface);
+  border: 1px solid var(--rec-border);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.rec-kpi-card:hover {
+  border-color: #3b3b3b;
+}
+
+.rec-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.rec-kpi-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #1d1d1d;
+  border: 1px solid #2c2c2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.rec-kpi-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.rec-kpi-badge.is-up {
+  background: rgba(16, 185, 129, 0.14);
+  color: #34d399;
+}
+
+.rec-kpi-badge.is-down {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+}
+
+.rec-kpi-label {
+  font-size: 12px;
+  color: var(--rec-text-muted);
+}
+
+.rec-kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ---------- Bars (profile + time distribution share these) ---------- */
+
+.rec-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rec-bar-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #d4d4d4;
+  margin-bottom: 6px;
+}
+
+.rec-bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rec-surface-2);
+  overflow: hidden;
+}
+
+.rec-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s ease;
+}
+
+/* ---------- Donut chart (time on tools) ---------- */
+
+.rec-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rec-donut {
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+  transform: rotate(-90deg); /* start the first slice at 12 o'clock */
+}
+
+.rec-donut-ring,
+.rec-donut-slice {
+  fill: none;
+  stroke-width: 14;
+}
+
+.rec-donut-ring {
+  stroke: var(--rec-surface-2);
+}
+
+.rec-donut-slice {
+  transition: stroke-dasharray 0.8s ease;
+}
+
+/* the text must be turned back, because the whole svg is rotated */
+.rec-donut-total,
+.rec-donut-sub {
+  fill: var(--rec-text);
+  transform: rotate(90deg);
+  transform-origin: 60px 60px;
+}
+
+.rec-donut-total {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.rec-donut-sub {
+  font-size: 9px;
+  fill: var(--rec-text-muted);
+}
+
+.rec-donut-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rec-donut-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.rec-donut-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rec-donut-name {
+  flex: 1;
+}
+
+.rec-donut-value {
+  font-size: 12px;
+  color: var(--rec-text-muted);
+}
+
+/* ---------- Weekly activity chart + split layout ---------- */
+
+.rec-split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+}
+
+.rec-chart {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  height: 180px;
+}
+
+.rec-chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+/* the track has a real height, so the bar's % height works */
+.rec-chart-track {
+  flex: 1;
+  width: 100%;
+  max-width: 36px;
+  display: flex;
+  align-items: flex-end;
+  padding-top: 20px; /* room for the number above the tallest bar */
+  border-bottom: 1px solid var(--rec-border);
+}
+
+.rec-chart-bar {
+  position: relative;
+  width: 100%;
+  min-height: 3px;
+  border-radius: 4px 4px 0 0;
+  background: var(--rec-accent);
+  transition: height 0.7s ease;
+}
+
+/* number above each bar, hidden when the day has 0 actions */
+.rec-chart-bar::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--rec-text-muted);
+}
+
+.rec-chart-bar[data-count="0"]::after {
+  display: none;
+}
+
+.rec-chart-label {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--rec-text-muted);
+}
+
+/* ---------- Recommendation cards ---------- */
+
+.rec-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.rec-tool-card {
+  background: var(--rec-surface);
+  border: 1px solid var(--rec-border);
+  border-radius: 14px;
+  padding: 22px;
+  transition: border-color 0.2s ease;
+}
+
+.rec-tool-card:hover {
+  border-color: var(--rec-accent);
+}
+
+.rec-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.rec-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rec-tool-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rec-accent);
+  background: var(--rec-accent-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.rec-match-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rec-accent);
+  background: var(--rec-accent-soft);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.rec-save-btn {
+  background: none;
+  border: none;
+  color: var(--rec-text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.rec-save-btn.is-saved,
+.rec-save-btn:hover {
+  color: var(--rec-accent);
+}
+
+.rec-tool-card h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.rec-tool-card p {
+  font-size: 13px;
+  color: var(--rec-text-muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.rec-tool-reason {
+  font-size: 12px;
+  color: var(--rec-accent);
+}
+
+.rec-visit {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rec-text);
+  text-decoration: none;
+}
+
+.rec-visit:hover {
+  color: var(--rec-accent);
+}
+
+.rec-tool-reason {
+  display: block;
+}
+
+/* ---------- Lists (top tools + recent activity) ---------- */
+
+.rec-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rec-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--rec-border);
+}
+
+.rec-list-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.rec-list-meta {
+  font-size: 12px;
+  color: var(--rec-text-muted);
+}
+
+.rec-rank {
+  width: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rec-accent);
+}
+
+.rec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rec-accent);
+  flex-shrink: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .rec-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .rec-split,
+  .rec-tool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .rec-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-bar-fill,
+  .rec-chart-bar {
+    transition: none;
+  }
+}

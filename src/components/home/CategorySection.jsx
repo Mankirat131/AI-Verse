@@ -1,6 +1,6 @@
 import Reveal from './Reveal.jsx';
 import './CategorySection.css';
-import categories from '../../data/categories.js';
+import categories from '../../data/categories';
 
 
 const icons = {
